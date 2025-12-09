@@ -1,6 +1,6 @@
 SRC := main.cpp
 
-CPPC := mpicxx
+CPPC := mpic++
 CPPFLAGS := -Wall
 LDFLAGS := -lgtest -lgtest_main -lpthread
 
