@@ -6,7 +6,7 @@ double logisticStep(double, double);
 double solveLogistic(double, double, int);
 void runMPI(int argc, char** argv);
 
-int main() {
+int main(int argc, char** argv) {
 	MPI_Init(&argc, &argv);
 
 	runMPI(argc, argv);
@@ -46,4 +46,7 @@ void runMPI(int argc, char** argv) {
 	if (world_rank == 0)
 		for (int i = 0; i <= 10; i++)
 			all_r_values.push_back(r_start + i * r_step);
+
+	int total_tasks = (r_end - r_start) / r_step + 1.0;
+
 }
