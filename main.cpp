@@ -67,7 +67,7 @@ void runMPI(int argc, char** argv) {
 	std::vector<double> local_results(local_count);
 
 	MPI_Scatterv(
-		rank == 0 ? all_r_values.data() : nullptr,
+		world_rank == 0 ? all_r_values.data() : nullptr,
 		sendcounts.data(),
 		displs.data(),
 		MPI_DOUBLE,
@@ -77,4 +77,9 @@ void runMPI(int argc, char** argv) {
 		0,
 		MPI_COMM_WORLD
 	);
+
+	for (int i = 0; i < local_count; i++) {
+		local_results[i] = solveLogistic(local_r[i], x0, steps);
+		std::cout << "[Rank " << world_rank << "] Calculated r=" << local_r[i] << "Result=" << local_results[i] << std::endl;
+	}
 }
