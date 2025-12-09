@@ -14,7 +14,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libgtest-dev cmake gcovr
+        sudo apt-get install -y libgtest-dev cmake gcovr mpich
         cd /usr/src/gtest && sudo cmake . && sudo make && sudo cp lib/*.a /usr/lib/
 
     - name: Build, test
