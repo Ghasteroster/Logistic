@@ -49,4 +49,16 @@ void runMPI(int argc, char** argv) {
 
 	int total_tasks = (r_end - r_start) / r_step + 1.0;
 
+	std::vector<int> send_counts(world_size);
+	std::vector<int> displacements(world_size);
+
+	int remainder = total_tasks % world_size;
+	int sum = 0;
+	for (int i = 0; i < world_size; i++) {
+		send_counts[i] = total_tasks / world_size;
+		if (i < remainder)
+			send_counts[i]++;
+		displacements[i] = sum;
+		sum += send_counts[i];
+	}
 }
