@@ -1,4 +1,3 @@
-Yml:
 on:
   push:
     branches: [ "main" ]
