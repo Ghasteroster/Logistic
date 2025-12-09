@@ -1,7 +1,12 @@
 #include <iostream>
 
+double logisticStep(double, double);
+
 int main() {
-	std::cout << "Hello, MPI!";
 
 	return 0;
+}
+
+double logisticStep(double r, double x) {
+	return r * x * (1.0 - x);
 }
