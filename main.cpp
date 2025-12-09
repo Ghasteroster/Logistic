@@ -49,16 +49,32 @@ void runMPI(int argc, char** argv) {
 
 	int total_tasks = (r_end - r_start) / r_step + 1.0;
 
-	std::vector<int> send_counts(world_size);
-	std::vector<int> displacements(world_size);
+	std::vector<int> sendcounts(world_size);
+	std::vector<int> displs(world_size);
 
 	int remainder = total_tasks % world_size;
 	int sum = 0;
 	for (int i = 0; i < world_size; i++) {
-		send_counts[i] = total_tasks / world_size;
+		sendcounts[i] = total_tasks / world_size;
 		if (i < remainder)
-			send_counts[i]++;
-		displacements[i] = sum;
-		sum += send_counts[i];
+			sendcounts[i]++;
+		displs[i] = sum;
+		sum += sendcounts[i];
 	}
+
+	int local_count = send_count[world_rank];
+	std::vector<double> local_r(local_count);
+	std::vector<double> local_results(local_count);
+
+	MPI_Scatterv(
+		rank == 0 ? all_r_values.data() : nullptr,
+		sendcounts.data(),
+		displs.data(),
+		MPI_DOUBLE,
+		local_r.data(),
+		local_count,
+		MPI_DOUBLE,
+		0,
+		MPI_COMM_WORLD
+	);
 }
