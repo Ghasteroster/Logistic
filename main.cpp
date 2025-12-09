@@ -62,7 +62,7 @@ void runMPI(int argc, char** argv) {
 		sum += sendcounts[i];
 	}
 
-	int local_count = send_count[world_rank];
+	int local_count = sendcounts[world_rank];
 	std::vector<double> local_r(local_count);
 	std::vector<double> local_results(local_count);
 
@@ -80,6 +80,7 @@ void runMPI(int argc, char** argv) {
 
 	for (int i = 0; i < local_count; i++) {
 		local_results[i] = solveLogistic(local_r[i], x0, steps);
-		std::cout << "[Rank " << world_rank << "] Calculated r=" << local_r[i] << "Result=" << local_results[i] << std::endl;
+		std::cout << "[Rank " << world_rank << "] Calculated r=" << local_r[i];
+		std::cout << " Result=" << local_results[i] << std::endl;
 	}
 }
