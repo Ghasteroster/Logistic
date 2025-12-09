@@ -30,4 +30,11 @@ void runMPI(int argc, char** argv) {
 	int rank, size;
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 	MPI_Comm_size(MPI_COMM_WORLD, &size);
+
+	const int steps = 100;
+	const double x0 = 0.5;
+	const double r_start = 2.8;
+	const double r_end = 3.8;
+	const double r_step = 0.1;
+
 }
