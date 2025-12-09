@@ -3,6 +3,7 @@
 #include <string>
 #include <fstream>
 #include <iomanip>
+#include <cmath>
 #include <mpi.h>
 #include "gtest/gtest.h"
 
