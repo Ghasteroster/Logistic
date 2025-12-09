@@ -1,5 +1,8 @@
 #include <iostream>
 #include <vector>
+#include <string>
+#include <fstream>
+#include <iomanip>
 #include <mpi.h>
 
 double logisticStep(double, double);
@@ -80,12 +83,12 @@ void runMPI(int argc, char** argv) {
 
 	for (int i = 0; i < local_count; i++) {
 		local_results[i] = solveLogistic(local_r[i], x0, steps);
-		std::cout << "[Rank " << world_rank << "] Calculated r=" << local_r[i];
-		std::cout << " Result=" << local_results[i] << std::endl;
+		std::cout << "[Ранг " << world_rank << "] Вычисленное r=" << local_r[i];
+		std::cout << " Результат=" << local_results[i] << std::endl;
 	}
 
 	std::vector<double> all_results;
-	if (rank == 0)
+	if (world_rank == 0)
 		all_results.resize(total_tasks);
 	
 	MPI_Gatherv(
@@ -95,8 +98,25 @@ void runMPI(int argc, char** argv) {
 		world_rank == 0 ? all_results.data() : nullptr,
 		sendcounts.data(),
 		displs.data(),
-		MPI_DOUBlE,
+		MPI_DOUBLE,
 		0,
 		MPI_COMM_WORLD
 	);
+
+	if (world_rank == 0) {
+		std::string filename = "result.dat";
+		std::ofstream outFile(filename);
+		if (!outFile.is_open()) {
+			std::cerr << "Ошибка отрытия файла для чтения!" << std::endl;
+			MPI_Abort(MPI_COMM_WORLD, 1);
+		}
+		
+		std::cout << "Вычисление завершено. Запись результатов в " << filename << ".." << std::endl;
+		outFile << "Значение r\tРезультат_X\n";
+		for (int i = 0; i < total_tasks; i++)
+			outFile << std::fixed << std::setprecision(1) << all_r_values[i] << "\t\t" << std::setprecision(6) << all_results[i] << "\n";
+
+		outFile.close();
+		std::cout << "Конец." << std::endl;
+	}
 }
