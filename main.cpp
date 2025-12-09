@@ -112,7 +112,7 @@ void runMPI(int argc, char** argv) {
 		}
 		
 		std::cout << "Вычисление завершено. Запись результатов в " << filename << ".." << std::endl;
-		outFile << "Значение r\tРезультат_X\n";
+		outFile << "Значение r\tРезультат_X100\n";
 		for (int i = 0; i < total_tasks; i++)
 			outFile << std::fixed << std::setprecision(1) << all_r_values[i] << "\t\t" << std::setprecision(6) << all_results[i] << "\n";
 
