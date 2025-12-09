@@ -1,7 +1,10 @@
 #include <iostream>
+#include <vector>
+#include <mpi.h>
 
 double logisticStep(double, double);
-double solveLogistic(double, double, int) {
+double solveLogistic(double, double, int);
+void runMPI(int argc, char** argv);
 
 int main() {
 	MPI_Init(&argc, &argv);
@@ -27,9 +30,11 @@ double solveLogistic(double r, double x0, int N) {
 }
 
 void runMPI(int argc, char** argv) {
-	int rank, size;
-	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-	MPI_Comm_size(MPI_COMM_WORLD, &size);
+	int world_rank;
+	MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
+
+	int world_size;
+	MPI_Comm_size(MPI_COMM_WORLD, &world_size);
 
 	const int steps = 100;
 	const double x0 = 0.5;
@@ -37,4 +42,8 @@ void runMPI(int argc, char** argv) {
 	const double r_end = 3.8;
 	const double r_step = 0.1;
 
+	std::vector<double> all_r_values;
+	if (world_rank == 0)
+		for (int i = 0; i <= 10; i++)
+			all_r_values.push_back(r_start + i * r_step);
 }
