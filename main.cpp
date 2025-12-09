@@ -83,4 +83,20 @@ void runMPI(int argc, char** argv) {
 		std::cout << "[Rank " << world_rank << "] Calculated r=" << local_r[i];
 		std::cout << " Result=" << local_results[i] << std::endl;
 	}
+
+	std::vector<double> all_results;
+	if (rank == 0)
+		all_results.resize(total_tasks);
+	
+	MPI_Gatherv(
+		local_results.data(),
+		local_count,
+		MPI_DOUBLE,
+		world_rank == 0 ? all_results.data() : nullptr,
+		sendcounts.data(),
+		displs.data(),
+		MPI_DOUBlE,
+		0,
+		MPI_COMM_WORLD
+	);
 }
